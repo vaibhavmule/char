@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== USER ====================
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  password      String?
+  avatar        String?
+  bio           String?
+  username      String?  @unique
+  plan          Plan     @default(FREE)
+  credits       Int      @default(100)
+  isAdmin       Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  characters    Character[]
+  conversations Conversation[]
+  likes         CharacterLike[]
+  followers     Follow[]        @relation("Following")
+  following     Follow[]        @relation("Follower")
+  subscription  Subscription?
+  messages      Message[]
+}
+
+// ==================== CHARACTER ====================
+model Character {
+  id               String    @id @default(cuid())
+  name             String
+  description      String
+  personality      String
+  backstory        String?
+  greeting         String
+  avatar           String?
+  banner           String?
+  voiceId          String?
+  category         Category  @default(OTHER)
+  tags             String[]
+  isPublic         Boolean   @default(true)
+  isNSFW           Boolean   @default(false)
+  isFeatured       Boolean   @default(false)
+  interactionCount Int       @default(0)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  creatorId     String
+  creator       User      @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  conversations Conversation[]
+  likes         CharacterLike[]
+}
+
+// ==================== CONVERSATION ====================
+model Conversation {
+  id        String   @id @default(cuid())
+  title     String?
+  summary   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  characterId String
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+
+  messages  Message[]
+
+  @@unique([userId, characterId])
+}
+
+// ==================== MESSAGE ====================
+model Message {
+  id        String      @id @default(cuid())
+  content   String
+  role      MessageRole
+  audioUrl  String?
+  createdAt DateTime    @default(now())
+
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+// ==================== CHARACTER LIKE ====================
+model CharacterLike {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  characterId String
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, characterId])
+}
+
+// ==================== FOLLOW ====================
+model Follow {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  followerId  String
+  follower    User   @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+
+  followingId String
+  following   User   @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+}
+
+// ==================== SUBSCRIPTION ====================
+model Subscription {
+  id               String    @id @default(cuid())
+  stripeCustomerId String?   @unique
+  stripePriceId    String?
+  stripeSubId      String?   @unique
+  plan             Plan      @default(FREE)
+  status           SubStatus @default(INACTIVE)
+  currentPeriodEnd DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ==================== ENUMS ====================
+enum Plan {
+  FREE
+  PRO
+  ULTRA
+}
+
+enum SubStatus {
+  ACTIVE
+  INACTIVE
+  CANCELLED
+  PAST_DUE
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+enum Category {
+  ANIME
+  GAME
+  MOVIE
+  BOOK
+  CELEBRITY
+  HISTORICAL
+  ASSISTANT
+  ROLEPLAY
+  OTHER
+}

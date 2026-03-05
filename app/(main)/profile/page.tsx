@@ -76,44 +76,47 @@ export default async function ProfilePage() {
   } as const
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="max-w-4xl mx-auto p-4 md:p-6 space-y-6">
       {/* Profile Header */}
-      <Card className="p-6">
+      <Card className="p-4 md:p-6">
         <div className="flex items-start gap-4">
-          <Avatar className="h-20 w-20">
+          <Avatar className="h-16 w-16 md:h-20 md:w-20 shrink-0">
             <AvatarImage src={user.avatar ?? ""} />
             <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-2xl">
               {user.name.charAt(0)}
             </AvatarFallback>
           </Avatar>
 
-          <div className="flex-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl font-bold">{user.name}</h1>
-              <Badge variant={planColors[user.plan]}>
-                {user.plan === "FREE" ? null : <Crown className="h-3 w-3 mr-1" />}
-                {user.plan}
-              </Badge>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h1 className="text-xl font-bold">{user.name}</h1>
+                  <Badge variant={planColors[user.plan]}>
+                    {user.plan === "FREE" ? null : <Crown className="h-3 w-3 mr-1" />}
+                    {user.plan}
+                  </Badge>
+                </div>
+                {user.username && (
+                  <p className="text-muted-foreground text-sm">@{user.username}</p>
+                )}
+                {user.bio && (
+                  <p className="text-sm mt-1">{user.bio}</p>
+                )}
+                <p className="text-xs text-muted-foreground mt-1">
+                  Joined {formatDate(user.createdAt)}
+                </p>
+              </div>
+              <Button variant="outline" size="sm" className="gap-2 shrink-0">
+                <Edit className="h-4 w-4" />
+                <span className="hidden sm:inline">Edit Profile</span>
+              </Button>
             </div>
-            {user.username && (
-              <p className="text-muted-foreground text-sm">@{user.username}</p>
-            )}
-            {user.bio && (
-              <p className="text-sm mt-1">{user.bio}</p>
-            )}
-            <p className="text-xs text-muted-foreground mt-1">
-              Joined {formatDate(user.createdAt)}
-            </p>
           </div>
-
-          <Button variant="outline" size="sm" className="gap-2 shrink-0">
-            <Edit className="h-4 w-4" />
-            Edit Profile
-          </Button>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-4 gap-4 mt-6 pt-6 border-t border-border">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-border">
           <div className="text-center">
             <p className="text-xl font-bold">{formatNumber(user._count.characters)}</p>
             <p className="text-xs text-muted-foreground">Characters</p>
@@ -168,7 +171,7 @@ export default async function ProfilePage() {
               </a>
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
               {characters.map((char) => (
                 <CharacterCard key={char.id} character={char as any} />
               ))}
@@ -186,7 +189,7 @@ export default async function ProfilePage() {
               </a>
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
               {likedCharacters.map((char) => (
                 <CharacterCard key={char.id} character={char as any} />
               ))}

@@ -63,7 +63,7 @@ export default function Sidebar() {
   }, [])
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-card flex flex-col">
+    <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-card hidden md:flex flex-col">
       {/* Logo */}
       <div className="flex items-center gap-2 px-6 py-5 border-b border-border">
         <Sparkles className="h-6 w-6 text-primary" />

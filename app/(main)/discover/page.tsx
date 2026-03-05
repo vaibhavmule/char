@@ -42,7 +42,7 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
   })
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div className="p-4 md:p-6 max-w-7xl mx-auto space-y-6">
       <div>
         <h1 className="text-2xl font-bold mb-1">Discover Characters</h1>
         <p className="text-muted-foreground text-sm">Find your perfect AI companion</p>
@@ -52,6 +52,7 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <form>
+          {category && <input type="hidden" name="category" value={category} />}
           <Input
             name="q"
             defaultValue={q}
@@ -64,7 +65,11 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
       {/* Categories */}
       <div className="flex flex-wrap gap-2">
         {categories.map((cat) => (
-          <a key={cat.value} href={cat.value ? `/discover?category=${cat.value}` : "/discover"}>
+          <a key={cat.value} href={
+            cat.value
+              ? `/discover?category=${cat.value}${q ? `&q=${encodeURIComponent(q)}` : ""}`
+              : q ? `/discover?q=${encodeURIComponent(q)}` : "/discover"
+          }>
             <Badge
               variant={category === cat.value || (!category && !cat.value) ? "default" : "outline"}
               className="cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
@@ -86,7 +91,7 @@ export default async function DiscoverPage({ searchParams }: DiscoverPageProps) 
             <p className="text-sm">Try a different search or category</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
             {characters.map((character) => (
               <CharacterCard key={character.id} character={character as any} />
             ))}

@@ -145,9 +145,9 @@ export default function ChatWindow({ character, initialMessages }: ChatWindowPro
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-[100dvh]">
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-border bg-card/50 backdrop-blur-sm shrink-0">
+      <div className="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-3 border-b border-border bg-card/50 backdrop-blur-sm shrink-0">
         <Link href="/home">
           <Button variant="ghost" size="icon" className="h-8 w-8">
             <ArrowLeft className="h-4 w-4" />
@@ -313,7 +313,7 @@ export default function ChatWindow({ character, initialMessages }: ChatWindowPro
             <Send className="h-4 w-4" />
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground text-center mt-1.5">
+        <p className="hidden sm:block text-xs text-muted-foreground text-center mt-1.5">
           Press Enter to send · Shift+Enter for new line
         </p>
       </div>

@@ -137,7 +137,7 @@ export default function EditCharacterPage() {
 
   if (fetching) {
     return (
-      <div className="p-6 max-w-3xl mx-auto space-y-4">
+      <div className="p-4 md:p-6 max-w-3xl mx-auto space-y-4">
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-40 w-full" />
         <Skeleton className="h-40 w-full" />
@@ -146,7 +146,7 @@ export default function EditCharacterPage() {
   }
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-4 md:p-6 max-w-3xl mx-auto">
       <div className="mb-6">
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <Pencil className="h-6 w-6 text-primary" />

@@ -30,7 +30,7 @@ export default async function CharacterDetailPage({ params }: CharacterDetailPro
   if (!character) notFound()
 
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-6">
+    <div className="max-w-3xl mx-auto p-4 md:p-6 space-y-6">
       {/* Back */}
       <Link href="/home">
         <Button variant="ghost" size="sm" className="gap-2 -ml-2">
@@ -58,7 +58,7 @@ export default async function CharacterDetailPage({ params }: CharacterDetailPro
 
       {/* Info */}
       <div className="pt-10">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-2xl font-bold">{character.name}</h1>
@@ -80,8 +80,8 @@ export default async function CharacterDetailPage({ params }: CharacterDetailPro
                 </Button>
               </Link>
             )}
-            <Link href={`/chat/${character.id}`}>
-              <Button className="gap-2">
+            <Link href={`/chat/${character.id}`} className="flex-1 sm:flex-none">
+              <Button className="gap-2 w-full sm:w-auto">
                 <MessageSquare className="h-4 w-4" />
                 Chat Now
               </Button>

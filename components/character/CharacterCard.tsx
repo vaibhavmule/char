@@ -75,7 +75,7 @@ export default function CharacterCard({ character }: CharacterCardProps) {
               {character.name}
             </h3>
           </Link>
-          <Badge variant="outline" className="text-xs shrink-0">
+          <Badge variant="outline" className="text-xs shrink-0 hidden min-[360px]:inline-flex">
             {character.category}
           </Badge>
         </div>
